@@ -48,12 +48,13 @@ async function getActress(id: number): Promise<Actress | null> {
   try {
     const response = await fetch(`http://localhost:3333/actresses/${id}`);
     if (!response.ok) {
-      throw new Error(`Errore HTTP " ${response.status}: ${response.statusText}`)
+      throw new Error(`Errore HTTP " ${response.status}: ${response.statusText}`);
     }
     const dati: unknown = await response.json();
     if (!isActress(dati)) {
       throw new Error("Formato dati non valido");
     }
+    return dati;
   } catch (error) {
     if (error instanceof Error) {
       console.error("Errore durante il recupero dell'attrice", error);
@@ -68,7 +69,7 @@ async function getAllActresses(): Promise<Actress[]> {
   try {
     const response = await fetch(`http://localhost:3333/actresses/`);
     if (!response.ok) {
-      throw new Error(`Errore HTTP " ${response.status}: ${response.statusText}`)
+      throw new Error(`Errore HTTP " ${response.status}: ${response.statusText}`);
     }
     const dati: unknown = await response.json();
     if (!(dati instanceof Array)) {
@@ -76,6 +77,21 @@ async function getAllActresses(): Promise<Actress[]> {
     }
     const attriciValide: Actress[] = dati.filter(isActress);
     return attriciValide;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Errore durante il recupero delle attrici", error);
+    } else {
+      console.error("Errore sconosciuto", error);
+    }
+    return [];
+  }
+}
+
+async function getActresses(ids: number[]): Promise<(Actress | null)[]> {
+  try {
+    const promises = ids.map(id => getActress(id));
+    const actresses = await Promise.all(promises);
+    return actresses;
   } catch (error) {
     if (error instanceof Error) {
       console.error("Errore durante il recupero delle attrici", error);
