@@ -7,3 +7,21 @@ type Person = {
   image: string
 }
 
+type ActressNationality =
+  | "American"
+  | "British"
+  | "Australian"
+  | "Israeli-American"
+  | "South African"
+  | "French"
+  | "Indian"
+  | "Israeli"
+  | "Spanish"
+  | "South Korean"
+  | "Chinese"
+
+type Actress = Person & {
+  mostFamousMovie: [string, string, string],
+  awards: string,
+  nationality: ActressNationality,
+}
